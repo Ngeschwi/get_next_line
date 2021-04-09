@@ -12,19 +12,19 @@
 
 #include "get_next_line.h"
 
-int		find_index(const char *s)
+int	find_index(const char *str)
 {
 	int		i;
 
 	i = 0;
-	while (s[i] && s[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 		i++;
-	if (s[i] != '\n')
+	if (str[i] != '\n')
 		return (-1);
 	return (i);
 }
 
-int		get_line(char *str, char **line, int i)
+int	get_line(char *str, char **line, int i)
 {
 	int		len;
 
@@ -35,36 +35,51 @@ int		get_line(char *str, char **line, int i)
 	return (1);
 }
 
-int get_next_line(int fd, char **line)
+int	condition(char **line, char *str, int nbr_read)
 {
-    char            buff[BUFSIZ + 1];
-    static char     *str = NULL;
-    int             index;
-    int             nbr_read;
+	*line = ft_strdup(str);
+	free(str);
+	str = NULL;
+	return (nbr_read);
+}
 
-    if (BUFSIZ < 0 || !line || fd < 0 || read(fd, buff, 0) < 0)
-        return (-1);
-    if (str && (((index = find_index(str)) != -1)))
-		return (get_line(str, line, index));
-	while (((nbr_read = read(fd, buff, BUFSIZ)) > 0))
+int	get_next_line(int fd, char **line)
+{
+	char			buff[BUFFER_SIZE + 1];
+	static char		*str = NULL;
+	int				nbr_read;
+
+	if (BUFFER_SIZE < 0 || !line || fd < 0 || read(fd, buff, 0) < 0)
+		return (-1);
+	nbr_read = read(fd, buff, BUFFER_SIZE);
+	while (nbr_read > 0)
 	{
 		buff[nbr_read] = '\0';
 		str = ft_strjoin(str, buff);
-		if (((index = find_index(str)) != -1))
-			return (get_line(str, line, index));
+		if (find_index(str) != -1)
+			return (get_line(str, line, find_index(str)));
+		nbr_read = read(fd, buff, BUFFER_SIZE);
 	}
+	buff[nbr_read] = '\0';
+		str = ft_strjoin(str, buff);
 	if (str)
-	{
-		*line = ft_strdup(str);
-		free(str);
-		str = NULL;
-		return (nbr_read);
-	}
+		if (find_index(str) != 1)
+			return (get_line(str, line, find_index(str)));
+	if (str)
+		return (condition(line, str, nbr_read));
 	*line = ft_strdup("");
 	return (nbr_read);
 }
 
 int main()
 {
-    return (0);
+	int fd;
+	char *line = NULL;
+	int i = 0;
+
+	fd = open("files/empty_lines", O_RDONLY);
+	while (get_next_line(fd, &line) > 0)
+	{
+		printf("|%s\n", line);
+	}
 }

@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-size_t		ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t	i;
 
@@ -22,12 +22,13 @@ size_t		ft_strlen(const char *str)
 	return (i);
 }
 
-char		*ft_strdup(const char *str1)
+char	*ft_strdup(const char *str1)
 {
 	int		i;
 	char	*str2;
 
-	if (!(str2 = (char*)malloc(ft_strlen(str1) * sizeof(char) + 1)))
+	str2 = malloc(sizeof(char) * (ft_strlen(str1) + 1));
+	if (!str2)
 		return (NULL);
 	i = 0;
 	while (str1[i])
@@ -46,11 +47,11 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	i = 0;
 	if (dst == 0 && src == 0)
 		return (NULL);
-	if (((unsigned char*)dst) < ((unsigned char*)src))
+	if (((unsigned char *)dst) < ((unsigned char *)src))
 	{
 		while (i < len)
 		{
-			((unsigned char*)dst)[i] = ((unsigned char*)src)[i];
+			((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
 			i++;
 		}
 	}
@@ -59,21 +60,22 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 		i = len - 1;
 		while ((int)i >= 0)
 		{
-			((unsigned char*)dst)[i] = ((unsigned char*)src)[i];
+			((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
 			i--;
 		}
 	}
 	return (dst);
 }
 
-char		*ft_substr(char const *s, int start, int len)
+char	*ft_substr(char const *s, int start, int len)
 {
 	char	*str;
 	int		i;
 
 	if (!s)
 		return (NULL);
-	if (!(str = (char*)malloc((len + 1) * sizeof(char))))
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
 		return (NULL);
 	i = 0;
 	while (i < len)
@@ -85,20 +87,19 @@ char		*ft_substr(char const *s, int start, int len)
 	return (str);
 }
 
-char		*ft_strjoin(char *str, char *buff)
+char	*ft_strjoin(char *str, char *buff)
 {
-	int		len1;
-	int		len2;
+	int		len_str;
+	int		len_buff;
 	int		i;
 	char	*dst;
 
 	if (!str)
-		return (buff);
-	if (!buff)
-		return (NULL);
-	len1 = ft_strlen(str);
-	len2 = ft_strlen(buff);
-	if (!(dst = (char*)malloc((len1 + len2 + 1) * sizeof(char))))
+		return (ft_strdup(buff));
+	len_str = ft_strlen(str) - 1;
+	len_buff = ft_strlen(buff) - 1;
+	dst = malloc(sizeof(char) * (len_str + len_buff + 1));
+	if (!dst)
 		return (NULL);
 	i = 0;
 	while (str[i++])
@@ -107,7 +108,7 @@ char		*ft_strjoin(char *str, char *buff)
 	str = NULL;
 	i = 0;
 	while (buff[i++])
-		dst[len1 + i] = buff[i];
-	dst[len1 + i] = '\0';
+		dst[len_str + i] = buff[i];
+	dst[len_str + i] = '\0';
 	return (dst);
 }
