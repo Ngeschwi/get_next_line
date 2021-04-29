@@ -22,63 +22,43 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strdup(const char *str1)
+char	*ft_strdup(const char *str)
 {
 	int		i;
-	char	*str2;
+	char	*dst;
 
-	str2 = malloc(sizeof(char) * (ft_strlen(str1) + 1));
-	if (!str2)
+	if (str == NULL)
+	{
+		dst = malloc(sizeof(char) * 2);
+		dst[1] = '\n';
+		dst[0] = '\0';
+		return (dst);
+	}
+	dst = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!dst)
 		return (NULL);
 	i = 0;
-	while (str1[i])
+	while (str[i])
 	{
-		str2[i] = str1[i];
+		dst[i] = str[i];
 		i++;
 	}
-	str2[i] = '\0';
-	return (str2);
-}
-
-void	*ft_memmove(void *dst, const void *src, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	if (dst == 0 && src == 0)
-		return (NULL);
-	if (((unsigned char *)dst) < ((unsigned char *)src))
-	{
-		while (i < len)
-		{
-			((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-			i++;
-		}
-	}
-	else
-	{
-		i = len - 1;
-		while ((int)i >= 0)
-		{
-			((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-			i--;
-		}
-	}
+	dst[i] = '\0';
 	return (dst);
 }
 
-char	*ft_substr(char const *s, int start, int len)
+char	*ft_substr(char const *s, int start, int end)
 {
 	char	*str;
 	int		i;
 
 	if (!s)
 		return (NULL);
-	str = malloc(sizeof(char) * (len + 1));
+	str = malloc(sizeof(char) * (end - start + 1));
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (i < len)
+	while (start + i < end && s[i])
 	{
 		str[i] = s[start + i];
 		i++;
@@ -87,28 +67,34 @@ char	*ft_substr(char const *s, int start, int len)
 	return (str);
 }
 
-char	*ft_strjoin(char *str, char *buff)
+char	*ft_strjoin(char **str, char *buff)
 {
 	int		len_str;
 	int		len_buff;
 	int		i;
 	char	*dst;
 
-	if (!str)
+	i = 0;
+	if (*str == NULL)
 		return (ft_strdup(buff));
-	len_str = ft_strlen(str) - 1;
-	len_buff = ft_strlen(buff) - 1;
+	len_str = ft_strlen(*str);
+	len_buff = ft_strlen(buff);
 	dst = malloc(sizeof(char) * (len_str + len_buff + 1));
 	if (!dst)
 		return (NULL);
+	while (i < len_str)
+	{
+		dst[i] = (*str)[i];
+		i++;
+	}
 	i = 0;
-	while (str[i++])
-		dst[i] = str[i];
-	free(str);
-	str = NULL;
-	i = 0;
-	while (buff[i++])
-		dst[len_str + i] = buff[i];
-	dst[len_str + i] = '\0';
+	while (i < len_buff)
+	{
+		dst[i + len_str] = buff[i];
+		i++;
+	}
+	dst[i + len_str] = '\0';
+	free(*str);
+	*str = NULL;
 	return (dst);
 }
