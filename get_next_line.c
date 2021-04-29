@@ -6,7 +6,7 @@
 /*   By: ngeschwi <ngeschwi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 10:55:41 by ngeschwi          #+#    #+#             */
-/*   Updated: 2021/04/29 13:48:38 by ngeschwi         ###   ########.fr       */
+/*   Updated: 2021/04/29 15:12:09 by ngeschwi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ static int	ft_get_line(char **line, char **str, int index)
 	char	*save_str;
 
 	save_str = *str;
-	*line = ft_substr(save_str, 0, index + 1);
+	*line = ft_substr(save_str, 0, index);
 	free(*str);
-	*str = ft_substr(save_str, index + 2, ft_strlen(*str));
+	if (!save_str[index + 1])
+		*str = NULL;
+	else
+		*str = ft_substr(save_str, index + 1, ft_strlen(save_str));
 	return (1);
 }
 
@@ -64,13 +67,13 @@ int	get_next_line(int fd, char **line)
 	return (0);
 }
 
-int main()
+int	main(void)
 {
-	int fd;
-	char *line = NULL;
-	int	get;
+	int		fd;
+	char	*line = NULL;
+	int		get;
 
-	fd = open("files/alphabet", O_RDONLY);
+	fd = open("files/test", O_RDONLY);
 	get = get_next_line(fd, &line);
 	while (get > 0)
 	{
@@ -78,5 +81,5 @@ int main()
 		get = get_next_line(fd, &line);
 	}
 	printf("|%s", line);
-	// while(1);
+	return (1);
 }
