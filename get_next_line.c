@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngeschwi <ngeschwi@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ngeschwi <ngeschwi@stutent.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 10:55:41 by ngeschwi          #+#    #+#             */
-/*   Updated: 2021/04/29 15:12:09 by ngeschwi         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:43:28 by ngeschwi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ static int	ft_get_line(char **line, char **str, int index)
 {
 	char	*save_str;
 
-	save_str = *str;
-	*line = ft_substr(save_str, 0, index);
+	save_str = ft_strdup(*str);
 	free(*str);
-	if (!save_str[index + 1])
+	*line = ft_substr(save_str, 0, index);
+	if (save_str[index + 1] == '\0')
 		*str = NULL;
 	else
 		*str = ft_substr(save_str, index + 1, ft_strlen(save_str));
+	free(save_str);
 	return (1);
 }
 
@@ -73,7 +74,7 @@ int	main(void)
 	char	*line = NULL;
 	int		get;
 
-	fd = open("files/test", O_RDONLY);
+	fd = open("files/alphabet", O_RDONLY);
 	get = get_next_line(fd, &line);
 	while (get > 0)
 	{
