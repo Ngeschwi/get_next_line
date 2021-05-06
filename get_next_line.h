@@ -21,7 +21,7 @@
 # include <sys/stat.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 42
 # endif
 
 int			get_next_line(int fd, char **line);
@@ -29,5 +29,6 @@ size_t		ft_strlen(const char *s);
 char		*ft_strdup(const char *s1);
 char		*ft_substr(char const *s, int start, int len);
 char		*ft_strjoin(char **str, char *buff);
+void		ft_free_if_define(char **str);
 
 #endif

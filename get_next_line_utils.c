@@ -29,8 +29,7 @@ char	*ft_strdup(const char *str)
 
 	if (str == NULL)
 	{
-		dst = malloc(sizeof(char) * 2);
-		dst[1] = '\n';
+		dst = malloc(sizeof(char) * 1);
 		dst[0] = '\0';
 		return (dst);
 	}
@@ -54,6 +53,14 @@ char	*ft_substr(char const *s, int start, int end)
 
 	if (!s)
 		return (NULL);
+	if (end < start)
+		return (NULL);
+	if (end == 0 && start == 0)
+	{
+		str = malloc(sizeof(char) * 1);
+		str[0] = '\0';
+		return (str);
+	}
 	str = malloc(sizeof(char) * (end - start + 1));
 	if (!str)
 		return (NULL);
@@ -65,6 +72,15 @@ char	*ft_substr(char const *s, int start, int end)
 	}
 	str[i] = '\0';
 	return (str);
+}
+
+void	ft_free_if_define(char **str)
+{
+	if (*str)
+	{
+		free(*str);
+		*str = NULL;
+	}
 }
 
 char	*ft_strjoin(char **str, char *buff)
@@ -91,7 +107,6 @@ char	*ft_strjoin(char **str, char *buff)
 		i++;
 	}
 	dst[i + len_str] = '\0';
-	free(*str);
-	*str = NULL;
+	ft_free_if_define(str);
 	return (dst);
 }
