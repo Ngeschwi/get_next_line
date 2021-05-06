@@ -6,7 +6,7 @@
 /*   By: ngeschwi <ngeschwi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 10:55:41 by ngeschwi          #+#    #+#             */
-/*   Updated: 2021/05/06 11:28:19 by ngeschwi         ###   ########.fr       */
+/*   Updated: 2021/05/06 11:59:32 by ngeschwi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	ft_get_line(char **line, char **str, int index)
 
 	save_str = ft_strdup(*str);
 	free(*str);
-	if (index == 0)
-		*line = ft_substr(save_str, 0, 0);
-	else
-		*line = ft_substr(save_str, 0, index - 1);
+	*line = ft_substr(save_str, 0, index);
 	if (save_str[index + 1] == '\0')
 		*str = NULL;
 	else
@@ -39,7 +36,7 @@ static int	ft_check(char *str)
 		i++;
 	if (str[i] == '\n')
 		return (i);
-	return (-1);
+	return (NO_NL);
 }
 
 int	get_next_line(int fd, char **line)
@@ -54,7 +51,7 @@ int	get_next_line(int fd, char **line)
 	if (str)
 	{
 		index = ft_check(str);
-		if (index != -1)
+		if (index != NO_NL)
 			return (ft_get_line(line, &str, index));
 	}
 	nbr_read = read(fd, buff, BUFFER_SIZE);
@@ -63,11 +60,30 @@ int	get_next_line(int fd, char **line)
 		buff[nbr_read] = '\0';
 		str = ft_strjoin(&str, buff);
 		index = ft_check(str);
-		if (index != -1)
+		if (index != NO_NL)
 			return (ft_get_line(line, &str, index));
 		nbr_read = read(fd, buff, BUFFER_SIZE);
 	}
 	*line = ft_strdup(str);
 	ft_free_if_define(&str);
 	return (0);
+}
+
+int	main(void)
+{
+	int		fd;
+	char	*line = NULL;
+	int		get;
+
+	fd = open("files/alphabet", O_RDONLY);
+	get = get_next_line(fd, &line);
+	while (get > 0)
+	{
+		printf("|%s\n", line);
+		free(line);
+		get = get_next_line(fd, &line);
+	}
+	printf("|%s\n", line);
+	free(line);
+	return (1);
 }

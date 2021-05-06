@@ -61,6 +61,7 @@ char	*ft_substr(char const *s, int start, int end)
 		str[0] = '\0';
 		return (str);
 	}
+	end--;
 	str = malloc(sizeof(char) * (end - start + 1));
 	if (!str)
 		return (NULL);

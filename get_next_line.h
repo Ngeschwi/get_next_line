@@ -24,6 +24,8 @@
 #  define BUFFER_SIZE 42
 # endif
 
+# define NO_NL -1
+
 int			get_next_line(int fd, char **line);
 size_t		ft_strlen(const char *s);
 char		*ft_strdup(const char *s1);
