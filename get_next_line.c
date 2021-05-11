@@ -6,7 +6,7 @@
 /*   By: ngeschwi <ngeschwi@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 10:55:41 by ngeschwi          #+#    #+#             */
-/*   Updated: 2021/05/06 11:59:32 by ngeschwi         ###   ########.fr       */
+/*   Updated: 2021/05/11 15:35:20 by ngeschwi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ static int	ft_check(char *str)
 	return (NO_NL);
 }
 
+static void	ft_define_and_call(char **line, char **str)
+{
+	*line = ft_strdup(*str);
+	ft_free_if_define(str);
+}
+
 int	get_next_line(int fd, char **line)
 {
 	char			buff[BUFFER_SIZE + 1];
@@ -64,8 +70,7 @@ int	get_next_line(int fd, char **line)
 			return (ft_get_line(line, &str, index));
 		nbr_read = read(fd, buff, BUFFER_SIZE);
 	}
-	*line = ft_strdup(str);
-	ft_free_if_define(&str);
+	ft_define_and_call(line, &str);
 	return (0);
 }
 
