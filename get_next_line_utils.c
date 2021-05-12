@@ -22,6 +22,15 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
+void	ft_free_if_define(char **str)
+{
+	if (*str)
+	{
+		free(*str);
+		*str = NULL;
+	}
+}
+
 char	*ft_strdup(const char *str)
 {
 	int		i;
@@ -73,15 +82,6 @@ char	*ft_substr(char const *s, int start, int end)
 	}
 	str[i] = '\0';
 	return (str);
-}
-
-void	ft_free_if_define(char **str)
-{
-	if (*str)
-	{
-		free(*str);
-		*str = NULL;
-	}
 }
 
 char	*ft_strjoin(char **str, char *buff)
